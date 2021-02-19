@@ -1,0 +1,26 @@
+{
+  "name": "backend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "start": "node ./index.js",
+    "dev": "nodemon ./index.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/omerokach/backend.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/omerokach/backend/issues"
+  },
+  "homepage": "https://github.com/omerokach/backend#readme",
+  "dependencies": {
+    "express": "^4.17.1",
+    "express-delay": "^0.2.0",
+    "nodemon": "^2.0.7",
+    "uuid": "^8.3.2"
+  }
+}

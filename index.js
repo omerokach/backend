@@ -1,7 +1,7 @@
 const uuid = require('uuid');
 const express = require('express');
 const fs = require('fs');
-var delay = require('express-delay');
+const delay = require('express-delay');
 const app = express();
 const PORT =3000;
 app.use(express.json());
@@ -9,13 +9,13 @@ app.use(delay(400));
  // get all the objects
 app.get('/b', (req, res) => {
     let files = [];
-    const objects = fs.readdirSync('./src/backend/database');
+    const objects = fs.readdirSync('./database');
     if(objects.length === 0){
         res.send('you have no objects');
     } else{
             try {
                 for( let object of objects){
-                    files.push(JSON.parse(fs.readFileSync(`./src/backend/database/${object}`)));
+                    files.push(JSON.parse(fs.readFileSync(`./database/${object}`)));
                 }
                 const successMessage = {
                     success: true,
@@ -31,12 +31,12 @@ app.get('/b', (req, res) => {
 
 // get a specific object by id
 app.get('/b/:id', (req,res) => {
-    if(!fs.existsSync(`./src/backend/database/${req.params.id}.json`)){
+    if(!fs.existsSync(`./database/${req.params.id}.json`)){
         res.status(400).send(`{
             "message": "Invalid Bin Id provided"
         }`);
     }else {
-        fs.readFile(`./src/backend/database/${req.params.id}.json` ,(err, data) =>{
+        fs.readFile(`./database/${req.params.id}.json` ,(err, data) =>{
         if(err){
             res.status(500).send('there is a problem with the server '+ err)
         } else{
@@ -58,12 +58,12 @@ app.get('/b/:id', (req,res) => {
 app.put('/b/:id', (req, res) =>{
     const {body} = req;
     body.id = req.params.id;
-    if(!fs.existsSync(`./src/backend/database/${req.params.id}.json`)){
+    if(!fs.existsSync(`./database/${req.params.id}.json`)){
         res.status(400).send(`{
             "message": "Bid id not found"
         }`);
     } else {
-        fs.writeFile(`./src/backend/database/${req.params.id}.json`, JSON.stringify(body, null, 4), (err) =>{
+        fs.writeFile(`./database/${req.params.id}.json`, JSON.stringify(body, null, 4), (err) =>{
         if(err){
             res.status(500).send('there is a problem with the server '+ err);
         } else{
@@ -89,7 +89,7 @@ app.post('/b', (req, res) =>{
         }`)
     }
     body.id = id;
-    fs.writeFile(`./src/backend/database/${id}.json`, JSON.stringify(body, null, 4), (err) =>{
+    fs.writeFile(`./database/${id}.json`, JSON.stringify(body, null, 4), (err) =>{
         if(err){
             res.status(500).send("there is a problem with the server "+err)
         } else{
@@ -108,12 +108,12 @@ app.post('/b', (req, res) =>{
 //deleting specific file by id
 app.delete('/b/:id', (req, res) =>{
     const id = req.params.id;
-    if(!fs.existsSync(`./src/backend/database/${req.params.id}.json`)){
+    if(!fs.existsSync(`./database/${req.params.id}.json`)){
         res.status(400).send(`{
             "message": "Bid id not found"
         }`);
     } else {
-        fs.unlink(`./src/backend/database/${id}.json`, (err) =>{
+        fs.unlink(`./database/${id}.json`, (err) =>{
             if(err){
                 res.status(500).send('there is a problem with the server '+err);
             } else{
