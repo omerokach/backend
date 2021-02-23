@@ -31,9 +31,14 @@ app.get('/b', (req, res) => {
 
 // get a specific object by id
 app.get('/b/:id', (req,res) => {
-    if(!fs.existsSync(`./database/${req.params.id}.json`)){
-        res.status(400).send(`{
+    if(!req.params.id.match(/[a-zA-Z0-9]/)){
+        return res.status(400).send(`{
             "message": "Invalid Bin Id provided"
+        }`);
+    }
+    if(!fs.existsSync(`./database/${req.params.id}.json`)){
+        return res.status(404).send(`{
+            "message": "bin not found"
         }`);
     }else {
         fs.readFile(`./database/${req.params.id}.json` ,(err, data) =>{
@@ -123,6 +128,6 @@ app.delete('/b/:id', (req, res) =>{
      } } );    
     
    
-
+ module.exports = app;
  app.listen(PORT);
  console.log(`listening to ${PORT}`);
