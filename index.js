@@ -10,6 +10,11 @@ app.use(delay(400));
 app.get('/b', (req, res) => {
     let files = [];
     const objects = fs.readdirSync('./database');
+    if(!req.params.id.match(/[a-zA-Z0-9]/)){
+        return res.status(400).send({
+            message: "Invalid Bin Id provided"
+        });
+    }
     if(objects.length === 0){
         res.send('you have no objects');
     } else{
@@ -32,9 +37,9 @@ app.get('/b', (req, res) => {
 // get a specific object by id
 app.get('/b/:id', (req,res) => {
     if(!req.params.id.match(/[a-zA-Z0-9]/)){
-        return res.status(400).send(`{
-            "message": "Invalid Bin Id provided"
-        }`);
+        return res.status(400).send({
+            message: "Invalid Bin Id provided"
+        });
     }
     if(!fs.existsSync(`./database/${req.params.id}.json`)){
         return res.status(404).send(`{
@@ -64,9 +69,9 @@ app.put('/b/:id', (req, res) =>{
     const {body} = req;
     body.id = req.params.id;
     if(!req.params.id.match(/[a-zA-Z0-9]/)){
-        return res.status(400).send(`{
-            "message": "Invalid Bin Id provided"
-        }`);
+        return res.status(400).send({
+            message: "Invalid Bin Id provided"
+        });
     }
     if(!fs.existsSync(`./database/${req.params.id}.json`)){
         res.status(404).send(`{
@@ -118,8 +123,13 @@ app.post('/b', (req, res) =>{
 //deleting specific file by id
 app.delete('/b/:id', (req, res) =>{
     const id = req.params.id;
+    if(!req.params.id.match(/[a-zA-Z0-9]/)){
+        return res.status(400).send({
+            message: "Invalid Bin Id provided"
+        });
+    }
     if(!fs.existsSync(`./database/${req.params.id}.json`)){
-        res.status(400).send(`{
+        res.status(404).send(`{
             "message": "Bid id not found"
         }`);
     } else {
