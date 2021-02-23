@@ -63,8 +63,13 @@ app.get('/b/:id', (req,res) => {
 app.put('/b/:id', (req, res) =>{
     const {body} = req;
     body.id = req.params.id;
+    if(!req.params.id.match(/[a-zA-Z0-9]/)){
+        return res.status(400).send(`{
+            "message": "Invalid Bin Id provided"
+        }`);
+    }
     if(!fs.existsSync(`./database/${req.params.id}.json`)){
-        res.status(400).send(`{
+        res.status(404).send(`{
             "message": "Bid id not found"
         }`);
     } else {
